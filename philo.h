@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:10 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/21 16:01:58 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/26 20:35:12 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,17 @@ typedef struct s_data
 	int				must_eat_count;
 	int				forks;
 	long long		start_time;
+	bool			stop;
 	pthread_mutex_t	print_;
 	pthread_mutex_t	eat_;
 	pthread_mutex_t	forks_;
 }					t_data;
+
+typedef enum mm
+{
+	LOCK,
+	UNLOCK
+}					t_mutex;
 
 typedef struct s_philo
 {
@@ -52,6 +59,10 @@ typedef struct s_philo
 	struct s_data	*data;
 }					t_philo;
 
-long long	get_time(void);
+long long			get_time(void);
 
+/*act is the act you perform on the mutex it either can equal LOCK or UNLOCK*/
+int	mutex_do(t_mutex act, pthread_mutex_t *mutex);
+/*should be called in the main thread to init the mutex_do func.*/
+pthread_mutex_t	*mutex_locker(void);
 #endif

@@ -1,6 +1,6 @@
-SRC=main.c 
+SRC=main.c  mutex.c
 OBJ=$(SRC:.c=.o)
-CFLAGS= -g3 
+CFLAGS= -g3  -fsanitize=thread 
 CC=cc
 NAME=philo
 

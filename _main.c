@@ -1,24 +1,24 @@
-#include "philo.h"
+#include <stdio.h>
 
-typedef union _main
+struct Node {
+    int somevar;
+};
+
+void print() {
+    printf("Hello from an object-oriented C method!");
+};
+
+struct Tree {
+    struct Node * NIL;
+    void (*FPprint)(void);
+    struct Node *root;
+    struct Node NIL_t;
+} TreeA = {&TreeA.NIL_t,print};
+
+int main()
 {
-    int x;
-    char y;
-    float z;
-} t_main;
-
-
-
-int main(int argc, char **argv)
-{
-    t_main main;
-    main.x = 42;
-    main.y = 'A';
-    main.z = 3.14;
-    printf("x: %d\n", main.x);
-    printf("y: %c\n", main.y);
-    printf("z: %f\n", main.z);
-    return (0);
-
-
+    struct Tree TreeB;
+    TreeB = TreeA;
+    TreeB.FPprint();
+    return 0;
 }
