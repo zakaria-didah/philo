@@ -1,41 +1,32 @@
-#include <stddef.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "vector.h"
 
-typedef struct Vector
+void	*ft_realloc(void *s, size_t size)
 {
-	void	*data;
-	size_t	size;
-	size_t	capacity;
-	size_t	element_size;
+	void	*new;
 
-	void	(*push_back)(struct Vector *, const void *);
-	void	(*pop_back)(struct Vector *);
-	void	*(*get)(struct Vector *, size_t index);
-	void	(*set)(struct Vector *, size_t index, const void *);
-	void	(*destroy)(struct Vector *);
-}			Vector;
+	if (!s)
+		return (ft_calloc(size, C_ARENA));
+	new = ft_calloc(size, C_ARENA);
+	ft_memmove(new, s, size);
+	free(s);
+	return (new);
+}
 
-Vector		*vector_new(size_t element_size);
-
-#define INITIAL_CAPACITY 10
-
-static void	vector_push_back(Vector *vec, const void *element)
+static void	vector_push_back(t_vector *vec, const void *element)
 {
 	void	*target;
 
 	if (vec->size >= vec->capacity)
 	{
 		vec->capacity *= 2;
-		vec->data = realloc(vec->data, vec->capacity * vec->element_size);
+		vec->data = ft_realloc(vec->data, vec->capacity * vec->element_size);
 	}
 	target = (char *)vec->data + vec->size * vec->element_size;
-	memcpy(target, element, vec->element_size);
+	ft_memmove(target, element, vec->element_size);
 	vec->size++;
 }
 
-static void	vector_pop_back(Vector *vec)
+static void	vector_pop_back(t_vector *vec)
 {
 	if (vec->size > 0)
 	{
@@ -43,34 +34,34 @@ static void	vector_pop_back(Vector *vec)
 	}
 }
 
-static void	*vector_get(Vector *vec, size_t index)
+static void	*vector_get(t_vector *vec, size_t index)
 {
 	if (index >= vec->size)
 		return (NULL);
 	return ((char *)vec->data + index * vec->element_size);
 }
 
-static void	vector_set(Vector *vec, size_t index, const void *element)
+static void	vector_set(t_vector *vec, size_t index, const void *element)
 {
 	void	*target;
 
 	if (index >= vec->size)
 		return ;
 	target = (char *)vec->data + index * vec->element_size;
-	memcpy(target, element, vec->element_size);
+	ft_memmove(target, element, vec->element_size);
 }
 
-static void	vector_destroy(Vector *vec)
+static void	vector_destroy(t_vector *vec)
 {
 	free(vec->data);
 	free(vec);
 }
 
-Vector	*vector_new(size_t element_size)
+t_vector	*vector_new(size_t element_size)
 {
-	Vector	*vec;
+	t_vector	*vec;
 
-	vec = malloc(sizeof(Vector));
+	vec = malloc(sizeof(t_vector));
 	vec->data = malloc(INITIAL_CAPACITY * element_size);
 	vec->size = 0;
 	vec->capacity = INITIAL_CAPACITY;
@@ -81,21 +72,4 @@ Vector	*vector_new(size_t element_size)
 	vec->set = vector_set;
 	vec->destroy = vector_destroy;
 	return (vec);
-}
-
-int	main(void)
-{
-	Vector	*v;
-	char	*n;
-	char	**val;
-
-	v = vector_new(sizeof(char *));
-	n = "z0000000000000000000";
-	char *z = "11111111111111111";
-	v->push_back(v, &n);
-	val = (char **)v->get(v, 6);
-    if (val)
-	    printf("[%s] ", *val);
-	v->destroy(v);
-	return (0);
 }

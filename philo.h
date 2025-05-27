@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:10 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/26 20:35:12 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/28 00:03:51 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHILO_H
 
 # include "garb/garb.h"
+# include "vector.h"
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -42,11 +43,24 @@ typedef struct s_data
 	pthread_mutex_t	forks_;
 }					t_data;
 
-typedef enum mm
+typedef struct s_mutex
+{
+	pthread_mutex_t	*mutex;
+	bool			locked;
+}					t_mutex;
+
+typedef struct s_locker
+{
+	pthread_t		*owner;
+	t_vector		*mutexs;
+
+}					t_locker;
+
+typedef enum
 {
 	LOCK,
 	UNLOCK
-}					t_mutex;
+}					locks;
 
 typedef struct s_philo
 {
@@ -60,9 +74,10 @@ typedef struct s_philo
 }					t_philo;
 
 long long			get_time(void);
-
+t_data				*_data(void);
+void				*ft_memmove(void *dst, const void *src, size_t len);
 /*act is the act you perform on the mutex it either can equal LOCK or UNLOCK*/
-int	mutex_do(t_mutex act, pthread_mutex_t *mutex);
+int					mutex_do(int act, pthread_t *t, pthread_mutex_t *mutex);
 /*should be called in the main thread to init the mutex_do func.*/
-pthread_mutex_t	*mutex_locker(void);
+pthread_mutex_t		*mutex_locker(void);
 #endif
