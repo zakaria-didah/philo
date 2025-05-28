@@ -1,64 +1,38 @@
-#include "philo.h"
+// #include "philo.h"
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <unistd.h>
 
-struct Node {
-    int somevar;
-};
+int			start_ = 0;
 
-void print() {
-    printf("Hello from an object-oriented C method!");
-};
-
-struct Tree {
-    struct Node * NIL;
-    void (*FPprint)(void);
-    struct Node *root;
-    struct Node NIL_t;
-} TreeA = {&TreeA.NIL_t,print};
-
-pthread_mutex_t A;
-pthread_mutex_t B;
-t_data	*_data(void)
+long long	get_time(void)
 {
-    static t_data	data = {0};
+	struct timeval	tv;
+	long long		time;
 
-    return (&data);
+	gettimeofday(&tv, NULL);
+	time = ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+	return (time);
 }
 
-void voo(){
-    printf("%lld\n",_data()->start_time);
-}
-
-void *r(void*s){
-    printf("lock A %s\n", (char *)s);
-    pthread_mutex_lock(&A);
-    usleep(50);
-    pthread_mutex_lock(&B);
-    printf("shiiiiiiiiiit\n");
-    return NULL;
-    
-}
-
-void rr(void*s){
-    
-
-}
-
-
-void clean(void *f){
-    void *p =  *(void **)f;
-    free(p);
-    p = NULL;
-}
-
-int main()
+void	sleep_with_one_eye_open(int time)
 {
+	int	duration;
 
-t_data *d = _data();
-d->start_time = 1;
-voo();
+	duration = get_time() + time;
+	while (1)
+	{
+		usleep(1);
+		if (get_time() == duration || get(stop_()))
+			break ;
+	}
+}
 
-
-
+int	main(void)
+{
+	start_ = get_time();
+	sleep_with_one_eye_open(60 * 1000);
 }

@@ -127,7 +127,6 @@ int	_lock_(pthread_mutex_t *mutex)
 {
 	if (pthread_mutex_lock(mutex))
 		return (printf("can't lock mutex %p\n", mutex), 0);
-	// printf("lock\n");
 	return (1);
 }
 
@@ -141,23 +140,24 @@ int	_unlock_(pthread_mutex_t *mutex)
 
 int	mutex_do(int act, pthread_mutex_t *mutex)
 {
-	static bool	locked = false;
+	// static bool	locked = false;
 	int			status;
 
 	status = 1;
-	_lock_(mutex_locker());
-	printf("state = %d %d\n", locked, act);
-	if (act == LOCK && !locked)
+	// _lock_(mutex_locker());
+	// printf("state = %d %d\n", locked, act);
+	if (act == LOCK )
 	{
 		status = _lock_(mutex);
-		locked = true;
+		// locked = true;
 	}
-	else if (act == UNLOCK && locked)
+	else if (act == UNLOCK )
 	{
-		printf("tt\n");
+		// printf("tt\n");
 		status = _unlock_(mutex);
 		// _lock_(mutex_locker());
-		locked = false;
+		// locked = false;
 	}
-	return (_unlock_(mutex_locker()), status);
+	// _unlock_(mutex_locker());
+	return ( status);
 }
