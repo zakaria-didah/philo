@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:37:29 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/26 20:35:32 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/28 12:22:37 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void	thinking(t_data *data, t_philo *p, size_t time)
 void	sleeping(t_data *data, t_philo *p)
 {
 	pthread_mutex_lock(&data->print_);
+	// printf("[%lld]", data->);
 	printf("%lld %d is sleeping\n", get_time() - data->start_time, p->id);
 	pthread_mutex_unlock(&data->print_);
 	usleep(data->time_to_sleep * 1000);
@@ -149,48 +150,48 @@ void	*routine(void *philo)
 	t_philo	*p;
 
 	p = (t_philo *)philo;
-	if (p->data->philo_count % 2 == 0)
-	{
-		while (*stop_(0) == false)
-		{
-			mutex_do(LOCK, &p->data->forks_);
-			if (p->data->forks && *stop_(0) == false)
-			{
-				p->data->forks -= 2;
-				mutex_do(UNLOCK, &p->data->forks_);
-				p->l_fork = 1;
-				p->r_fork = 1;
-				p_msg(p->data, p->id, "is eating");
-				p->last_eat_time = get_time();
-				usleep(p->data->time_to_eat * 1000);
-				if (*stop_(0) == false)
-					return (NULL);
-				p->data->forks += 2;
-				p->eat_count++;
-				p->l_fork = 0;
-				p->r_fork = 0;
-				sleeping(p->data, p);
-				thinking(p->data, p, 1);
-			}
-			if (!p->data->forks && *stop_(0) == false)
-			{
-				mutex_do(UNLOCK, &p->data->forks_);
-				if (p->data->time_to_die < p->data->time_to_eat)
-					sleeping(p->data, p);
-				else
-				{
-					thinking(p->data, p, p->data->time_to_eat);
-					continue ;
-				}
-			}
-			if (p->eat_count == p->data->must_eat_count)
-			{
-				return (NULL);
-			}
-		}
-	}
-	else
-	{
+	// if (p->data->philo_count % 2 == 0)
+	// {
+	// 	while (*stop_(0) == false)
+	// 	{
+	// 		mutex_do(LOCK, &p->data->forks_);
+	// 		if (p->data->forks && *stop_(0) == false)
+	// 		{
+	// 			p->data->forks -= 2;
+	// 			mutex_do(UNLOCK, &p->data->forks_);
+	// 			p->l_fork = 1;
+	// 			p->r_fork = 1;
+	// 			p_msg(p->data, p->id, "is eating");
+	// 			p->last_eat_time = get_time();
+	// 			usleep(p->data->time_to_eat * 1000);
+	// 			if (*stop_(0) == false)
+	// 				return (NULL);
+	// 			p->data->forks += 2;
+	// 			p->eat_count++;
+	// 			p->l_fork = 0;
+	// 			p->r_fork = 0;
+	// 			sleeping(p->data, p);
+	// 			thinking(p->data, p, 1);
+	// 		}
+	// 		if (!p->data->forks && *stop_(0) == false)
+	// 		{
+	// 			mutex_do(UNLOCK, &p->data->forks_);
+	// 			if (p->data->time_to_die < p->data->time_to_eat)
+	// 				sleeping(p->data, p);
+	// 			else
+	// 			{
+	// 				thinking(p->data, p, p->data->time_to_eat);
+	// 				continue ;
+	// 			}
+	// 		}
+	// 		if (p->eat_count == p->data->must_eat_count)
+	// 		{
+	// 			return (NULL);
+	// 		}
+	// 	}
+	// }
+	// else
+	// {
 		while (*stop_(0) == false)
 		{
 			mutex_do(LOCK, &p->data->forks_);
@@ -209,16 +210,19 @@ void	*routine(void *philo)
 				p->data->forks += 2;
 				mutex_do(UNLOCK, &p->data->forks_);
 				p->eat_count++;
-				(sleeping(_data(), p), thinking(p->data, p, 1));
+				(sleeping(p->data, p), thinking(p->data, p, 1));
 			}
+			printf("here1\n");
 			mutex_do(UNLOCK, &p->data->forks_);
+			// printf("here2\n");
+			// printf("dhfbvdf\n");
 			if (p->eat_count == p->data->must_eat_count)
-				return (NULL);
+			return (NULL);
 			if (p->last_eat_time + p->data->time_to_die < get_time()
-				- p->data->start_time)
+			- p->data->start_time)
 			{
 				*stop_(1) = true;
-				return (p_msg(p->data, p->id, "deid"),mutex_do(UNLOCK, &_data()->print_),NULL);
+				return (mutex_do(UNLOCK, &_data()->print_),p_msg(p->data, p->id, "deid"),NULL);
 			}
 			mutex_do(LOCK, &p->data->forks_);
 			if (p->data->forks <= 1)
@@ -234,7 +238,7 @@ void	*routine(void *philo)
 			}
 			mutex_do(UNLOCK, &_data()->forks_);
 		}
-	}
+	// }
 	return (NULL);
 }
 

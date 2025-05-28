@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:10 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/28 00:03:51 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/28 15:08:48 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@ typedef struct s_mutex
 	bool			locked;
 }					t_mutex;
 
+
+lst_addback(array.head, *new_mutex);
+{
+	enum type;
+	t_list *head;
+} array;
+
 typedef struct s_locker
 {
 	pthread_t		*owner;
@@ -77,7 +84,7 @@ long long			get_time(void);
 t_data				*_data(void);
 void				*ft_memmove(void *dst, const void *src, size_t len);
 /*act is the act you perform on the mutex it either can equal LOCK or UNLOCK*/
-int					mutex_do(int act, pthread_t *t, pthread_mutex_t *mutex);
+int					mutex_do(int act, pthread_mutex_t *mutex);
 /*should be called in the main thread to init the mutex_do func.*/
 pthread_mutex_t		*mutex_locker(void);
 #endif

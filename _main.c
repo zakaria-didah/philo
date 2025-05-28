@@ -19,10 +19,15 @@ struct Tree {
 
 pthread_mutex_t A;
 pthread_mutex_t B;
+t_data	*_data(void)
+{
+    static t_data	data = {0};
+
+    return (&data);
+}
 
 void voo(){
-    pthread_mutex_lock(&A);
-    printf("shit happend\n");
+    printf("%lld\n",_data()->start_time);
 }
 
 void *r(void*s){
@@ -47,20 +52,12 @@ void clean(void *f){
     p = NULL;
 }
 
-
 int main()
 {
-    char *s = strdup("hi there");
-    char *p;
-    printf("%p\n", s);
-    p = realloc(s, 20);
-    // printf("%p\n", s);
-    printf("%p\n", p);
-    // strncpy(s, "hi there how are u?", 20);
-    strncpy(p, "hi there how are u?", 20);
-    printf("%s\n", s);
-    printf("%s\n", p);
 
+t_data *d = _data();
+d->start_time = 1;
+voo();
 
 
 

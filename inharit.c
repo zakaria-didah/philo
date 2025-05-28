@@ -56,7 +56,7 @@ Dog* Dog_new(const char* name);
 #include <string.h>
 
 static void dog_speak(Animal* self) {
-    Dog* dog = (Dog*)self;
+    Dog* dog = (Dog*)self;Dog_new
     printf("%s says Woof!\n", dog->name);
 }
 
