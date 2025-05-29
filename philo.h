@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:10 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/29 00:34:00 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/29 14:42:08 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				must_eat_count;
 	int				forks;
-	long long		start_time;
+	size_t		start_time;
 	bool			stop;
 	pthread_mutex_t	print_;
 	pthread_mutex_t	eat_;
@@ -65,13 +65,14 @@ typedef struct s_philo
 {
 	int				id;
 	int				eat_count;
-	long long		last_eat_time;
+	size_t		last_eat_time;
 	int	is_eating;
+	int is_thinking;
 	pthread_t		thread;
 	struct s_data	*data;
 }					t_philo;
 
-long long			get_time(void);
+size_t			get_time(void);
 t_data				**_data(void);
 void				*ft_memmove(void *dst, const void *src, size_t len);
 /*act is the act you perform on the mutex it either can equal LOCK or UNLOCK*/
