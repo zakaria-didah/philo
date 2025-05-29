@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:38:10 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/28 22:49:28 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/29 00:34:00 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,8 @@ typedef struct s_philo
 	int				id;
 	int				eat_count;
 	long long		last_eat_time;
+	int	is_eating;
 	pthread_t		thread;
-	int				l_fork;
-	int				r_fork;
 	struct s_data	*data;
 }					t_philo;
 

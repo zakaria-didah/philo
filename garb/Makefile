@@ -1,6 +1,6 @@
 SRC=garb.c garb_utils.c garb_arena.c utiles.c 
 OBJ=$(SRC:.c=.o)
-CFLAGS= -g3 -Wall -Wextra -Werror
+CFLAGS= -g3 -Wall -Wextra -Werror -fPIE
 CC=cc
 NAME=garb.a
 

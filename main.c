@@ -6,7 +6,7 @@
 /*   By: zdidah <zdidah@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 14:37:29 by zdidah            #+#    #+#             */
-/*   Updated: 2025/05/28 23:41:26 by zdidah           ###   ########.fr       */
+/*   Updated: 2025/05/29 00:56:34 by zdidah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_philos(t_data *data, t_philo *philos)
 	i = 0;
 	while (i < data->philo_count)
 	{
-		philos[i].id = i;
+		philos[i].id = i + 1;
 		philos[i].eat_count = 0;
 		philos[i].last_eat_time = 0;
 		philos[i].data = data;
@@ -85,11 +85,11 @@ t_data	**_data(void)
 	return (&data);
 }
 
-void	thinking(t_data *data, t_philo *p, size_t time)
+void	thinking(t_philo *p, size_t time)
 {
-	pthread_mutex_lock(&data->print_);
-	printf("%lld %d is thinking\n", get_time() - data->start_time, p->id);
-	pthread_mutex_unlock(&data->print_);
+	pthread_mutex_lock(&p->data->print_);
+	printf("%lld %d is thinking\n", get_time() - p->data->start_time, p->id);
+	pthread_mutex_unlock(&p->data->print_);
 	sleep_with_one_eye_open(time);
 }
 
@@ -111,6 +111,7 @@ int	*stop_(void)
 int	get(int *p)
 {
 	int	i;
+
 	pthread_mutex_lock(&(*_data())->forks_);
 	i = *p;
 	pthread_mutex_unlock(&(*_data())->forks_);
@@ -139,7 +140,7 @@ void	*monitor_philos(void *philos)
 		{
 			if (get(&p[i].eat_count) == p[i].data->must_eat_count)
 				full++;
-			if (p[i].last_eat_time + p->data->time_to_die < get_time()
+			if (!get(&p[i].is_eating) && get((int *)&p[i].last_eat_time) + p->data->time_to_die < get_time()
 				- p->data->start_time)
 			{
 				set(stop_(), 1), p_msg(p->data, p->id, "deid");
@@ -169,14 +170,13 @@ void	sleep_with_one_eye_open(int time)
 bool	takefork(t_philo *p)
 {
 	int	should_eat;
+
 	should_eat = false;
 	pthread_mutex_lock(&p->data->eat_);
 	if (get(&p->data->forks) > 1)
 	{
 		set(&p->data->forks, get(&p->data->forks) - 2);
-		set(&p->l_fork, 1);
 		p_msg(p->data, p->id, "has taken a fork");
-		set(&p->r_fork, 1);
 		p_msg(p->data, p->id, "has taken a fork");
 		should_eat = true;
 	}
@@ -187,8 +187,10 @@ bool	takefork(t_philo *p)
 void	eating(t_philo *p)
 {
 	p_msg(p->data, p->id, "is eating");
-	p->last_eat_time = get_time() - p->data->start_time;
+	set((int*)&p->last_eat_time, (int)(get_time() - p->data->start_time));
+	set(&p->is_eating, true);
 	sleep_with_one_eye_open(p->data->time_to_eat);
+	p->is_eating=false;
 	set(&p->data->forks, get(&p->data->forks) + 2);
 	p->eat_count++;
 }
@@ -204,15 +206,15 @@ void	*routine(void *philo)
 		{
 			eating(p);
 			sleeping(p->data, p);
+			thinking(p, 1);
 		}
 		if (p->eat_count == p->data->must_eat_count)
 			return (NULL);
 		if (get(stop_()))
 			return (NULL);
-		if (get(&p->data->forks) <= 1 )
+		if (get(&p->data->forks) <= 1)
 		{
-			
-			thinking(p->data, p, 1);
+			thinking(p, p->data->time_to_eat+1);
 		}
 	}
 	return (NULL);
